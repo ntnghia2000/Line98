@@ -7,25 +7,46 @@ public class GridManager : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private Tile tilePrefab;
+    [SerializeField] private Ball ball;
     [SerializeField] private Transform cam;
     [SerializeField] Color WALKABLE_COLOR = new Color(196f/255f, 192f/255f, 189f/255f, 1.0f);
     [SerializeField] Color NON_WALKABLE_COLOR = new Color(0.1f/255f, 0.1f/255f, 0.1f/255f, 1.0f);
     private Tile[,] ListTile;
-    // Start is called before the first frame update
+
     void Start()
     {
         ListTile = new Tile[width, height];
         GenerateGrid();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0)) {
+        //right mouse click
+        if(Input.GetMouseButtonDown(1)) {
             HandleToggleWalkable();
+        }
+        //left mouse click
+        if(Input.GetMouseButtonDown(0)) {
+            HandleBallMove();
         }
     }
 
+    private void HandleBallMove() {
+        Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
+        
+        RaycastHit2D hit = Physics2D.Raycast(rayPos, Vector2.zero, 0.0f);
+        if(hit) {
+            GameObject hitObj = hit.transform.gameObject;
+            Tile tile = hitObj.GetComponent<Tile>();
+            if(tile) {
+                Vector3 ballPos = ball.GetBallPos();
+                Debug.Log(ballPos);
+                ball.AddWayPoint(tile.transform.position.x, tile.transform.position.y);
+            }
+        }
+    }
+
+    //handle tile walkable
     private void HandleToggleWalkable() {
         Vector2 rayPos = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
 
@@ -39,6 +60,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    //make tile walkable or not and change color
     private void ToggleWalkable(Tile tile) {
         tile.isWalkable = !tile.isWalkable;
         if(tile.isWalkable) {

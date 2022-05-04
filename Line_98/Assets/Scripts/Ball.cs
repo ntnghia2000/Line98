@@ -13,10 +13,18 @@ public class Ball : MonoBehaviour
         StartCoroutine(Coroutine_MoveTo());
     }
 
+    public void AddWayPoint(float x, float y) {
+        AddWayPoints(new Vector2(x, y));
+    }
+
+    public void AddWayPoints(Vector2 p) {
+        mWayPoints.Enqueue(p);
+    }
+
     IEnumerator Coroutine_MoveTo() {
         while (true) {
             while (mWayPoints.Count > 0) {
-                yield return startCoroutine(Coroutine_MoveToPoint(mWayPoints.Dequeue(), speed));
+                yield return StartCoroutine(Coroutine_MoveToPoint(mWayPoints.Dequeue(), speed));
             }
             yield return null;
         }
@@ -39,9 +47,7 @@ public class Ball : MonoBehaviour
         transform.position = endP;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public Vector3 GetBallPos () {
+        return transform.position;
     }
 }
