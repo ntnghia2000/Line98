@@ -8,6 +8,8 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject outerHighLight;
     [SerializeField] private SpriteRenderer innerHighLight;
+
+    public GridTile Tiles {get; set;}
     public bool isWalkable = true;
 
     public void Init(bool isOffset) {

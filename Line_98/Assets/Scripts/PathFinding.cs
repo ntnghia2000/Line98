@@ -99,6 +99,10 @@ namespace GameAI {
             public Node<T> Goal {get; private set;}
             protected PathFinderNode currentNode = null;
 
+            public PathFinderNode CurrentNode {
+                get {return currentNode;}
+            }
+
             public void Reset() {
                 if(pStatus == PathFinderStatus.RUNNING) {
                     return;
